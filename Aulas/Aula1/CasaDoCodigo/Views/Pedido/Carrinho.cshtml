@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Carrinho";
 }
-@model IList<ItemPedido>;
+@model CarrinhoViewModel;
 
 <h3>Meu Carrinho</h3>
 
@@ -27,7 +27,7 @@
     </div>
     <div class="panel-body">
 
-        @foreach (var item in Model)
+        @foreach (var item in Model.Items)
         {
 
             <div class="row row-center linha-produto" item-id="@item.Id">
@@ -39,14 +39,16 @@
                 <div class="col-md-2 text-center">
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button class="btn btn-default">
+                            <button onclick="carrinho.clickDecremento(this)" class="btn btn-default">
                                 <span class="glyphicon-minus"></span>
                             </button>
                         </span>
                         <input type="text" value="@(item.Quantidade)"
-                               class="form-control text-center" />
+                               class="form-control text-center" 
+                               onblur="carrinho.updateQuantidade(this)"
+                               />
                         <span class="input-group-btn">
-                            <button class="btn btn-default" onclick="clickIncremento(this)">
+                            <button class="btn btn-default" onclick="carrinho.clickIncremento(this)">
                                 <span class="glyphicon-plus"></span>
                             </button>
                         </span>
@@ -65,13 +67,13 @@
         <div class="row">
             <div class="col-md-10">
                 <span numero-itens>
-                    Total: @(Model.Count())
+                    Total: @(Model.Items.Count())
                     itens
                 </span>
             </div>
             <div class="col-md-2">
                 Total: R$ <span class="pull-right" total>
-                    @Model.Sum(i => i.Quantidade * i.PrecoUnitario)
+                    @(Model.Total)
                 </span>
             </div>
         </div>
@@ -84,19 +86,15 @@
             <a class="btn btn-success" asp-action="carrossel">
                 Adicionar Produtos
             </a>
-            <a class="btn btn-success" asp-action="resumo">
-                Finalizar Pedido
+            <a class="btn btn-success" asp-action="cadastro">
+                Preencher Cadastro
             </a>
         </div>
     </div>
 </div>
 
-@section Srcipts
+@section Scripts
 {
-    <script type="text/javascript">
-        function clickIncremento(btn) {
-            let itemId = $(btn).attr('item-id');
-
-        }
+    <script src="~/js/Carrinho.js">        
     </script>
 }
